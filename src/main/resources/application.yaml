@@ -1,0 +1,9 @@
+
+server:
+  port: 8080
+
+sapi:
+  creditCard:
+    url: "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
+  currentAccount:
+    url: "https://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
