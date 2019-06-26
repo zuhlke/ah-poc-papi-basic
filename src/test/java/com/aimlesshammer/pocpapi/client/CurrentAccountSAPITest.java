@@ -48,6 +48,7 @@ public class CurrentAccountSAPITest {
         CurrentAccountSAPI unit = new CurrentAccountSAPI(mockRestTemplateBuilder, urlTemplate);
         List<CurrentAccount> actual = unit.currentAccounts(customerId);
         assertThat(actual).containsAll(expected);
+        assertThat(expected).containsAll(actual);
     }
 
 }
