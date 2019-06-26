@@ -1,6 +1,8 @@
 
 package com.aimlesshammer.pocpapi.model;
 
+import java.util.Objects;
+
 public class Account {
 
     private String type;
@@ -29,6 +31,28 @@ public class Account {
 
     public String getBalance() {
         return balance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(type, account.type) &&
+            Objects.equals(customerId, account.customerId) &&
+            Objects.equals(accountNumber, account.accountNumber) &&
+            Objects.equals(balance, account.balance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, customerId, accountNumber, balance);
+    }
+
+    @Override
+    public String toString() {
+        String string = "Account{type:%s;customerId:%s;accountNumber:%s;balance:%s}";
+        return String.format(string, type, customerId, accountNumber, balance);
     }
 
 }
