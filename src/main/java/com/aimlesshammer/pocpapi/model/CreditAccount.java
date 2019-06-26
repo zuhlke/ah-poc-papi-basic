@@ -43,7 +43,7 @@ public class CreditAccount {
 
     @Override
     public String toString() {
-        String string = "CreditAccount{customerId:%s;creditCardNumber:%s;creditCardNumber:%s;balance:%s;balance:%s}";
+        String string = "CreditAccount{customerId:%s;creditCardNumber:%s;balance:%s}";
         return String.format(string, customerId, creditCardNumber, balance);
     }
 
