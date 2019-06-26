@@ -8,11 +8,11 @@
     "
 >
 
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.aimless-hammer</groupId>
+    <artifactId>ah-poc-papi-basic</artifactId>
     <version>0.0.0</version>
     <name>ah-poc-papi-basic</name>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>ah-poc-papi-basic</artifactId>
-    <groupId>com.aimless-hammer</groupId>
     <description>This is a proof-of-concept process API</description>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -29,6 +29,27 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.12.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <version>2.1.1.RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
