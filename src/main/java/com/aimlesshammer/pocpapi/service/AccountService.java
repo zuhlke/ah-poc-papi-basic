@@ -27,7 +27,7 @@ public class AccountService {
     public List<Account> accounts(String customerId) {
         logger.info(Application.LOG_ID + ": requesting credit accounts for customer: '{}'", customerId);
         List<Account> creditAccounts = creditAccountSAPI
-            .creditCards(customerId)
+            .creditAccounts(customerId)
             .stream()
             .map(account -> new Account("credit", account.getCustomerId(), account.getCreditCardNumber(), account.getBalance()))
             .collect(Collectors.toList());

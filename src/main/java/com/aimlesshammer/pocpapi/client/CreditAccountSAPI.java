@@ -20,7 +20,7 @@ public class CreditAccountSAPI {
         this.urlTemplate = urlTemplate;
     }
 
-    public List<CreditAccount> creditCards(String customerId) {
+    public List<CreditAccount> creditAccounts(String customerId) {
         final String urlString = urlTemplate.replace("{CUSTOMER_ID}", customerId);
         return webClient
             .get()
@@ -29,6 +29,7 @@ public class CreditAccountSAPI {
             .retrieve()
             .bodyToMono(CreditAccount[].class)
             .map(Arrays::asList)
+            .retry(2)
             .block();
     }
 
