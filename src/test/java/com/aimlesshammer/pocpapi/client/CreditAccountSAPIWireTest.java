@@ -34,11 +34,6 @@ public class CreditAccountSAPIWireTest {
         .withBody(json)
         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
 
-    /*@After
-    public void tearDown(){
-        WireMock.reset();
-    }*/
-
     @Test
     public void itIs() {
         String customerId = "1";
