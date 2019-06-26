@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CurrentAccountSAPITest {
+public class CurrentAccountSAPIMockTest {
 
     private RestTemplateBuilder mockRestTemplateBuilder = Mockito.mock(RestTemplateBuilder.class);
     private RestTemplate mockRestTemplate = Mockito.mock(RestTemplate.class);
