@@ -14,15 +14,18 @@ public class SapiClient<T> {
 
     private final WebClient webClient;
     private final String urlTemplate;
+    private final Integer retryCount;
+    private final Class<T[]> responseClass;
 
-    private Class<T[]> responseClass;
-
-
-    public SapiClient(WebClient webClient,
-                      String urlTemplate,
-                      Class<T[]> responseClass) {
+    public SapiClient(
+        WebClient webClient,
+        String urlTemplate,
+        Integer retryCount,
+        Class<T[]> responseClass
+    ) {
         this.webClient = webClient;
         this.urlTemplate = urlTemplate;
+        this.retryCount = retryCount;
         this.responseClass = responseClass;
     }
 
@@ -35,10 +38,8 @@ public class SapiClient<T> {
             .retrieve()
             .bodyToMono(responseClass)
             .map(Arrays::asList)
-            .retry(2)
+            .retry(retryCount)
             .block();
     }
-
-
 
 }

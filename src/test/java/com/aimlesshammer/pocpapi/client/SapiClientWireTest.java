@@ -9,8 +9,10 @@ import com.aimlesshammer.pocpapi.model.CreditAccount;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -26,13 +28,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 public class SapiClientWireTest {
 
-    @Rule public WireMockRule wireMockRule = new WireMockRule( 8080 );
-
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(8080);
+    private final Integer retryCount = 2;
     private final Class responseClass = CreditAccount[].class;
     private final SapiClient unit = new SapiClient(
-            new WebClientConfiguration().webClient(),
+        new WebClientConfiguration().webClient(),
         "http://localhost:8080/whatever/{CUSTOMER_ID}",
-            responseClass);
+        retryCount,
+        responseClass
+    );
 
     @Test
     public void itReceivesNonemptyList_WhenCustomerHasCard() {
@@ -75,9 +80,8 @@ public class SapiClientWireTest {
         try {
             List<CreditAccount> boom = unit.get("1");
             fail("should not reach this point");
-        }
-        catch (Exception e) {
-            verify(3, getRequestedFor(urlEqualTo("/whatever/1")));
+        } catch (Exception e) {
+            verify(retryCount + 1, getRequestedFor(urlEqualTo("/whatever/1")));
         }
     }
 

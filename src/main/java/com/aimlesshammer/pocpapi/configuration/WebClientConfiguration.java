@@ -47,11 +47,13 @@ public class WebClientConfiguration {
     public AccountService accountService(
             @Value("${sapi.creditCard.url}") String creditCardUrl,
             @Value("${sapi.currentAccount.url}") String currentCardUrl,
+            @Value("${sapi.retryCount}") Integer retryCount,
             WebClient webClient
     ) {
         return new AccountService(
-                new SapiClient(webClient, creditCardUrl, CreditAccount[].class ),
-                new SapiClient(webClient, currentCardUrl, CurrentAccount[].class ));
+                new SapiClient(webClient, creditCardUrl, retryCount, CreditAccount[].class ),
+                new SapiClient(webClient, currentCardUrl, retryCount, CurrentAccount[].class )
+        );
     }
 
 }

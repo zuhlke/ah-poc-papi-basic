@@ -3,6 +3,7 @@ server:
   port: 8080
 
 sapi:
+  retryCount: 2
   creditCard:
     url: "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance"
   currentAccount:
