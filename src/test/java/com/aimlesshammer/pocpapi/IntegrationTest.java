@@ -3,6 +3,7 @@ package com.aimlesshammer.pocpapi;
 
 import java.util.Arrays;
 import java.util.List;
+import com.aimlesshammer.pocpapi.configuration.AccountServiceConfiguration;
 import com.aimlesshammer.pocpapi.configuration.WebClientConfiguration;
 import com.aimlesshammer.pocpapi.model.Account;
 import com.aimlesshammer.pocpapi.service.AccountService;
@@ -15,7 +16,7 @@ public class IntegrationTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8080);
-    private final AccountService accountService = new WebClientConfiguration().accountService(
+    private final AccountService accountService = new AccountServiceConfiguration().accountService(
         "https://ah-poc-sapi-cc-bal.cfapps.io/customer/{CUSTOMER_ID}/balance",
         "https://ah-poc-sapi-ca-bal.cfapps.io/customer/{CUSTOMER_ID}/balance",
         2,
