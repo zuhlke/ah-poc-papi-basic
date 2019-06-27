@@ -26,7 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 public class SapiClientWireTest {
 
-    @Rule public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().port(8080));
+    @Rule public WireMockRule wireMockRule = new WireMockRule( 8080 );
 
     private final Class responseClass = CreditAccount[].class;
     private final SapiClient unit = new SapiClient(
