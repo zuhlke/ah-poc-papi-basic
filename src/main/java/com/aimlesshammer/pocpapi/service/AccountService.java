@@ -27,23 +27,21 @@ public class AccountService {
 
     public List<Account> accounts(String customerId) {
         logger.info(PapiApplication.LOG_ID + ": requesting credit accounts for customer: '{}'", customerId);
-        List<Account> creditAccounts = sapiCreditAccount
-            .get(customerId)
-            .stream()
-            .map(account -> new Account("credit", account.getCustomerId(), account.getCreditCardNumber(), account.getBalance()))
-            .collect(Collectors.toList());
         logger.info(PapiApplication.LOG_ID + ": requesting current accounts for customer: '{}'", customerId);
 
-        List<Account> currentAccounts = sapiCurrentAccount
-            .get(customerId)
-            .stream()
-            .map(account -> new Account("current", account.getCustomerId(), account.getAccountNumber(), account.getBalance()))
-            .collect(Collectors.toList());
+        // todo: make this useful ??
         logger.info(PapiApplication.LOG_ID + ": returning credit and current accounts for customer: '{}'", customerId);
 
         return Stream
-            .concat(creditAccounts.stream(), currentAccounts.stream())
-            .collect(Collectors.toList());
+                .concat(sapiCreditAccount
+                            .get(customerId)
+                            .stream()
+                            .map(account -> new Account("credit", account.getCustomerId(), account.getCreditCardNumber(), account.getBalance())),
+                        sapiCurrentAccount
+                            .get(customerId)
+                            .stream()
+                            .map(account -> new Account("current", account.getCustomerId(), account.getAccountNumber(), account.getBalance())) )
+                .collect(Collectors.toList());
     }
 
 }

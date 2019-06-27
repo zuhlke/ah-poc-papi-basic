@@ -3,6 +3,7 @@ package com.aimlesshammer.pocpapi.client;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -37,5 +38,7 @@ public class SapiClient<T> {
             .retry(2)
             .block();
     }
+
+
 
 }
