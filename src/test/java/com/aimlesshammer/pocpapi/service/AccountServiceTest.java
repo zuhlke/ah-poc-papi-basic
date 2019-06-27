@@ -21,7 +21,7 @@ public class AccountServiceTest {
     private final AccountService unit = new AccountService(creditAccountSAPI, currentAccountSAPI);
 
     @Test
-    public void itReturnsNonemptyList() {
+    public void itReturnsNonemptyList_WhenCustomerHasAccounts() {
         Mockito
             .when(creditAccountSAPI.creditAccounts("1"))
             .thenReturn(Collections.singletonList(new CreditAccount("1", "234", "567")));
@@ -35,7 +35,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void itReturnsEmptyList() {
+    public void itReturnsEmptyList_WhenCustomerHasNoAccounts() {
         Mockito
             .when(creditAccountSAPI.creditAccounts("2"))
             .thenReturn(new ArrayList<>());

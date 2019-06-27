@@ -11,6 +11,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
@@ -26,10 +27,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class CreditAccountSAPIWireTest {
 
     @Rule public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().port(8080));
-    private final CreditAccountSAPI unit = new CreditAccountSAPI(new WebClientConfiguration().webClient(), "http://localhost:8080/whatever/{CUSTOMER_ID}");
+    private final CreditAccountSAPI unit = new CreditAccountSAPI(new WebClientConfiguration().webClient(),
+        "http://localhost:8080/whatever/{CUSTOMER_ID}");
 
     @Test
-    public void itReceivesNonemptyList() {
+    public void itReceivesNonemptyList_WhenCustomerHasCard() {
         CreditAccount creditAccount = new CreditAccount("1", "234", "567");
         List<CreditAccount> expected = Collections.singletonList(creditAccount);
         ResponseDefinitionBuilder responseDefinitionBuilder = aResponse()
@@ -37,24 +39,22 @@ public class CreditAccountSAPIWireTest {
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
         List<CreditAccount> actual = unit.creditAccounts("1");
-        assertThat(actual).containsAll(expected);
-        assertThat(expected).containsAll(actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void itReceivesEmptyList() {
+    public void itReceivesEmptyList_WhenCustomerHasNoCards() {
         List<CreditAccount> expected = new ArrayList<>();
         ResponseDefinitionBuilder responseDefinitionBuilder = aResponse()
             .withBody(json2())
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
         List<CreditAccount> actual = unit.creditAccounts("1");
-        assertThat(actual).containsAll(expected);
-        assertThat(expected).containsAll(actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
-    @Test(expected = Exception.class)
-    public void itReceivesException() {
+    @Test(expected = WebClientResponseException.class)
+    public void itReceivesException_WhenResponseIsBad() {
         ResponseDefinitionBuilder responseDefinitionBuilder = aResponse()
             .withStatus(SC_BAD_REQUEST)
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
@@ -63,14 +63,14 @@ public class CreditAccountSAPIWireTest {
     }
 
     @Test
-    public void itTriesThrice() {
+    public void itTriesThrice_WhenResponseNotImmediatelyOK() {
         ResponseDefinitionBuilder responseDefinitionBuilder = aResponse()
             .withStatus(SC_BAD_REQUEST)
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
         try {
             List<CreditAccount> boom = unit.creditAccounts("1");
-            fail("que?");
+            fail("should not reach this point");
         }
         catch (Exception e) {
             verify(3, getRequestedFor(urlEqualTo("/whatever/1")));
