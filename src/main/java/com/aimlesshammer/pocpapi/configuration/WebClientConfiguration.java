@@ -2,9 +2,15 @@
 package com.aimlesshammer.pocpapi.configuration;
 
 import java.util.function.Function;
+
+import com.aimlesshammer.pocpapi.client.SapiClient;
+import com.aimlesshammer.pocpapi.model.CreditAccount;
+import com.aimlesshammer.pocpapi.model.CurrentAccount;
+import com.aimlesshammer.pocpapi.service.AccountService;
 import io.netty.channel.ChannelOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +41,17 @@ public class WebClientConfiguration {
             .defaultHeader(HttpHeaders.USER_AGENT, "Spring 5 WebClient")
             .filter(logging)
             .build();
+    }
+
+    @Bean
+    public AccountService accountService(
+            @Value("${sapi.creditCard.url}") String creditCardUrl,
+            @Value("${sapi.currentAccount.url}") String currentCardUrl,
+            WebClient webClient
+    ) {
+        return new AccountService(
+                new SapiClient(webClient, creditCardUrl, CreditAccount[].class ),
+                new SapiClient(webClient, currentCardUrl, CurrentAccount[].class ));
     }
 
 }

@@ -24,11 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
-public class CreditAccountSAPIWireTest {
+public class SapiClientWireTest {
 
     @Rule public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().port(8080));
-    private final CreditAccountSAPI unit = new CreditAccountSAPI(new WebClientConfiguration().webClient(),
-        "http://localhost:8080/whatever/{CUSTOMER_ID}");
+
+    private final Class responseClass = CreditAccount[].class;
+    private final SapiClient unit = new SapiClient(
+            new WebClientConfiguration().webClient(),
+        "http://localhost:8080/whatever/{CUSTOMER_ID}",
+            responseClass);
 
     @Test
     public void itReceivesNonemptyList_WhenCustomerHasCard() {
@@ -38,7 +42,7 @@ public class CreditAccountSAPIWireTest {
             .withBody(json1())
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
-        List<CreditAccount> actual = unit.creditAccounts("1");
+        List<CreditAccount> actual = unit.get("1");
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -49,7 +53,7 @@ public class CreditAccountSAPIWireTest {
             .withBody(json2())
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
-        List<CreditAccount> actual = unit.creditAccounts("1");
+        List<CreditAccount> actual = unit.get("1");
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -59,7 +63,7 @@ public class CreditAccountSAPIWireTest {
             .withStatus(SC_BAD_REQUEST)
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
-        List<CreditAccount> boom = unit.creditAccounts("1");
+        List<CreditAccount> boom = unit.get("1");
     }
 
     @Test
@@ -69,7 +73,7 @@ public class CreditAccountSAPIWireTest {
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE);
         stubFor(get("/whatever/1").willReturn(responseDefinitionBuilder));
         try {
-            List<CreditAccount> boom = unit.creditAccounts("1");
+            List<CreditAccount> boom = unit.get("1");
             fail("should not reach this point");
         }
         catch (Exception e) {
