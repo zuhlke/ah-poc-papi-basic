@@ -10,6 +10,8 @@ public class Account {
     private String accountNumber;
     private String balance;
 
+    public Account() {}
+
     public Account (String type, String customerId, String accountNumber, String balance) {
         this.type = type;
         this.customerId = customerId;
@@ -17,21 +19,15 @@ public class Account {
         this.balance = balance;
     }
 
-    public String getType() {
-        return type;
-    }
+    public void setType(String type) {this.type = type;}
+    public void setCustomerId(String customerId) {this.customerId = customerId;}
+    public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
+    public void setBalance(String balance) {this.balance = balance;}
 
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public String getBalance() {
-        return balance;
-    }
+    public String getType() {return type;}
+    public String getCustomerId() {return customerId;}
+    public String getAccountNumber() {return accountNumber;}
+    public String getBalance() {return balance;}
 
     @Override
     public boolean equals(Object o) {
